@@ -1,6 +1,15 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  selectCycle,
+  selectIsRunning,
+  selectMaxCycles,
+  selectMinutes,
+  selectSeconds,
+  selectWorkingMode,
+  selectWorkingTypes,
+} from "../../store/slices/timer/timer.selector";
+import {
   decrementSeconds,
   decrementMinutes,
   setMinutes,
@@ -8,20 +17,25 @@ import {
   setWorkingMode,
   setIsRunning,
   setCycle,
-} from "../../store/slices/timerSlice";
+} from "../../store/slices/timer/timer.slice";
 
 const Pomodoro = () => {
-  const { timer: timerState, settings: settingsState } = useSelector(
-    (state) => state
-  );
+  const workingTypes = useSelector(selectWorkingTypes);
+  const workingMode = useSelector(selectWorkingMode);
+  const minutes = useSelector(selectMinutes);
+  const seconds = useSelector(selectSeconds);
+  const isRunning = useSelector(selectIsRunning);
+  const cycle = useSelector(selectCycle);
+  const maxCycles = useSelector(selectMaxCycles);
+  const [initialRender, setInitialRender] = useState(true);
+  const { settings: settingsState } = useSelector((state) => state);
   const dispatch = useDispatch();
 
   const intervalRef = useRef(null);
 
   useEffect(() => {
-    if (timerState.isRunning) {
+    if (isRunning) {
       intervalRef.current = setInterval(() => {
-        console.log(timerState);
         dispatch(decrementSeconds());
       }, 1000);
     } else {
@@ -29,65 +43,54 @@ const Pomodoro = () => {
     }
 
     return () => clearInterval(intervalRef.current);
-  }, [timerState.isRunning]);
+  }, [isRunning]);
 
   useEffect(() => {
-    if (timerState.seconds === -1) {
+    if (seconds === -1) {
       dispatch(decrementMinutes());
       dispatch(setSeconds(59));
     }
 
-    if (timerState.minutes < 0) {
-      switch (timerState.workingMode) {
+    if (minutes < 0) {
+      switch (workingMode) {
         case "LongBreak": {
           dispatch(
-            setWorkingMode(
-              timerState.maxCycles
-                ? timerState.workingTypes[3]
-                : timerState.workingTypes[0]
-            )
+            setWorkingMode(maxCycles ? workingTypes[3] : workingTypes[0])
           );
-          dispatch(
-            setIsRunning(
-              timerState.cycle === timerState.maxCycles ? false : true
-            )
-          );
+          dispatch(setIsRunning(cycle === maxCycles ? false : true));
           break;
         }
         case "ShortBreak": {
-          dispatch(setWorkingMode(timerState.workingTypes[0]));
-          dispatch(
-            setCycle(
-              timerState.cycle < timerState.maxCycles
-                ? timerState.cycle + 1
-                : timerState.cycle
-            )
-          );
+          dispatch(setWorkingMode(workingTypes[0]));
+          dispatch(setCycle(cycle < maxCycles ? cycle + 1 : cycle));
           break;
         }
         case "Working": {
           dispatch(
             setWorkingMode(
-              timerState.cycle === timerState.maxCycles
-                ? timerState.workingTypes[2]
-                : timerState.workingTypes[1]
+              cycle === maxCycles ? workingTypes[2] : workingTypes[1]
             )
           );
           break;
         }
         case "Finished": {
-          dispatch(setWorkingMode(timerState.workingTypes[0]));
+          dispatch(setWorkingMode(workingTypes[0]));
           break;
         }
-
-        default:
+        default: {
           break;
+        }
       }
     }
-  }, [timerState.seconds, timerState.minutes]);
+  }, [seconds, minutes]);
 
   useEffect(() => {
-    switch (timerState.workingMode) {
+    if (initialRender) {
+      setInitialRender(false);
+      return;
+    }
+    console.log(`trigger`);
+    switch (workingMode) {
       case "Working": {
         dispatch(setMinutes(settingsState.userWorkingMinutes));
         dispatch(setSeconds(0));
@@ -110,22 +113,23 @@ const Pomodoro = () => {
         dispatch(setCycle(0));
         break;
       }
-      default:
+      default: {
         break;
+      }
     }
-  }, [timerState.workingMode]);
+  }, [workingMode, settingsState, dispatch]);
+
   return (
     <div className="flex flex-col py-5 px-9 mt-20 items-center justify-between h-72 bg-white/20 rounded-lg font-semibold w-[30rem]">
-      <div className="text-xl mb-4">Cycle: {timerState.cycle}</div>
+      <div className="text-xl mb-4">Cycle: {cycle}</div>
       <span className="text-7xl">
-        {timerState.minutes.toString().padStart(2, 0)}:
-        {timerState.seconds.toString().padStart(2, 0)}
+        {minutes.toString().padStart(2, 0)}:{seconds.toString().padStart(2, 0)}
       </span>
       <button
-        onClick={() => dispatch(setIsRunning(!timerState.isRunning))}
+        onClick={() => dispatch(setIsRunning(!isRunning))}
         className="bg-white w-1/2 text-red-500 mt-4 p-3 rounded-lg border-b-4 border-b-red-700/80 hover:-translate-y-0.5 transition shadow-lg active:translate-y-0.5 active:shadow-md"
       >
-        {!timerState.isRunning ? "Start" : "Pause"}
+        {!isRunning ? "Start" : "Pause"}
       </button>
     </div>
   );

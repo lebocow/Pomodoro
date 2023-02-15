@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
-import timerReducer from "./slices/timerSlice";
-import settingsReducer from "./slices/settingsSlice";
+import timerReducer from "./slices/timer/timer.slice";
+import settingsReducer from "./slices/settings/settings.slice";
 
 export const rootReducer = combineReducers({
   timer: timerReducer,

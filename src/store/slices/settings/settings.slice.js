@@ -26,6 +26,11 @@ export const settingsSlice = createSlice({
   },
 });
 
-export const { increment } = settingsSlice.actions;
+export const {
+  setUserWorkingMinutes,
+  setUserShortBreakMinutes,
+  setUserLongBreakMinutes,
+  setUserMaxCycles,
+} = settingsSlice.actions;
 
 export default settingsSlice.reducer;
