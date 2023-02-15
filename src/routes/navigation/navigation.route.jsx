@@ -19,7 +19,10 @@ const Navigation = () => {
             className="flex flex-row items-center justify-center space-x-1 bg-red-400/50 px-3 py-1 rounded-2xl hover:rounded-lg duration-150 cursor-pointer"
           >
             <div className="">
-              <img className="w-6 h-6 sm:w-8 sm:h-8" src={reports}></img>
+              <img
+                className="w-6 h-6 sm:w-8 sm:h-8 fill-white "
+                src={reports}
+              ></img>
             </div>
             <span className="hidden sm:block">Reports</span>
           </NavLink>
