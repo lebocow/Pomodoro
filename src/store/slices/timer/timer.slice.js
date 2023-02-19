@@ -9,7 +9,6 @@ const initialState = {
   seconds: 0,
   isRunning: false,
   cycle: 0,
-  maxCycles: 4,
 };
 
 export const timerSlice = createSlice({
@@ -31,9 +30,6 @@ export const timerSlice = createSlice({
     setCycle: (state, action) => {
       state.cycle = action.payload;
     },
-    setMaxCycles: (state, action) => {
-      state.maxCycles = action.payload;
-    },
     decrementMinutes: (state) => {
       state.minutes -= 1;
     },
@@ -49,7 +45,6 @@ export const {
   setSeconds,
   setIsRunning,
   setCycle,
-  setMaxCycles,
   decrementMinutes,
   decrementSeconds,
 } = timerSlice.actions;

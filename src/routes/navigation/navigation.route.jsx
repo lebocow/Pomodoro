@@ -8,7 +8,7 @@ import { NavLink, Outlet } from "react-router-dom";
 const Navigation = () => {
   return (
     <Fragment>
-      <div className="container flex items-center justify-between space-x-10 p-5 h-min">
+      <div className="w-full  flex items-center justify-between space-x-10 p-5 h-min">
         <NavLink to="/" className="flex items-center cursor-pointer">
           <img className="w-10 h-10 fill-red-500" src={tomatoLogo}></img>
           <div className="text-xl">Pomodoro</div>

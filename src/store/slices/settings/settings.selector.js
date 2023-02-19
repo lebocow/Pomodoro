@@ -18,3 +18,11 @@ export const selectUserMaxCycles = createSelector(
   [selectSettingsReducer],
   (settingsSlice) => settingsSlice.userMaxCycles
 );
+export const selectSounds = createSelector(
+  [selectSettingsReducer],
+  (settingsSlice) => settingsSlice.sounds
+);
+export const selectUserSound = createSelector(
+  [selectSettingsReducer],
+  (settingsSlice) => settingsSlice.userSound
+);

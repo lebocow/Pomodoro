@@ -1,6 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+import aggresiveSfx from "../../../sounds/aggresive.mp3";
+import tweetBirdSfx from "../../../sounds/tweetBird.mp3";
+
+const soundEffects = [aggresiveSfx, tweetBirdSfx];
+
 const initialState = {
+  sounds: soundEffects,
+  userSound: soundEffects[0],
   userWorkingMinutes: 25,
   userShortBreakMinutes: 5,
   userLongBreakMinutes: 15,
@@ -23,6 +30,9 @@ export const settingsSlice = createSlice({
     setUserMaxCycles: (state, action) => {
       state.userMaxCycles = action.payload;
     },
+    setUserSound: (state, action) => {
+      state.userSound = action.payload;
+    },
   },
 });
 
@@ -31,6 +41,7 @@ export const {
   setUserShortBreakMinutes,
   setUserLongBreakMinutes,
   setUserMaxCycles,
+  setUserSound,
 } = settingsSlice.actions;
 
 export default settingsSlice.reducer;
