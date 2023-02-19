@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectUserMaxCycles,
@@ -44,17 +44,20 @@ const Pomodoro = () => {
 
   const intervalRef = useRef(null);
 
-  useEffect(() => {
-    if (isRunning) {
-      intervalRef.current = setInterval(() => {
-        dispatch(decrementSeconds());
-      }, 25);
-    } else {
-      clearInterval(intervalRef.current);
-    }
+  const intervalFn = useMemo(() => {
+    return isRunning
+      ? () => {
+          intervalRef.current = setInterval(() => {
+            dispatch(decrementSeconds());
+          }, 25);
+        }
+      : () => clearInterval(intervalRef.current);
+  }, [isRunning, intervalRef]);
 
+  useEffect(() => {
+    intervalFn();
     return () => clearInterval(intervalRef.current);
-  }, [isRunning]);
+  }, [intervalFn, intervalRef]);
 
   useEffect(() => {
     if (seconds === -1) {
@@ -122,6 +125,7 @@ const Pomodoro = () => {
         dispatch(setSeconds(0));
         dispatch(setIsRunning(false));
         dispatch(setCycle(0));
+        playSound();
         break;
       }
       default: {
@@ -129,6 +133,14 @@ const Pomodoro = () => {
       }
     }
   }, [workingMode, settingsState]);
+
+  const handleButton = () => {
+    playClick();
+    if (workingMode === "Initial" || workingMode === "Finished") {
+      dispatch(setWorkingMode(workingTypes[0]));
+    }
+    dispatch(setIsRunning(!isRunning));
+  };
 
   return (
     <div className="h-full flex overflow-scroll">
@@ -139,10 +151,7 @@ const Pomodoro = () => {
           {seconds.toString().padStart(2, 0)}
         </span>
         <button
-          onClick={() => {
-            playClick();
-            dispatch(setIsRunning(!isRunning));
-          }}
+          onClick={handleButton}
           className="bg-white w-1/2 text-red-500 mt-4 p-3 rounded-lg border-b-4 border-b-red-700/80 hover:-translate-y-0.5 transition shadow-lg active:translate-y-0.5 active:shadow-md"
         >
           {!isRunning ? "Start" : "Pause"}

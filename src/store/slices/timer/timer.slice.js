@@ -1,10 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const workingTypes = ["Working", "ShortBreak", "LongBreak", "Finished"];
+const workingTypes = [
+  "Working",
+  "ShortBreak",
+  "LongBreak",
+  "Finished",
+  "Initial",
+];
 
 const initialState = {
   workingTypes,
-  workingMode: workingTypes[0],
+  workingMode: workingTypes[4],
   minutes: 25,
   seconds: 0,
   isRunning: false,
@@ -17,6 +23,7 @@ export const timerSlice = createSlice({
   reducers: {
     setWorkingMode: (state, action) => {
       state.workingMode = action.payload;
+      // if (state.workingMode === workingTypes[0]) state.cycle += 1;
     },
     setMinutes: (state, action) => {
       state.minutes = action.payload;

@@ -2,8 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import aggresiveSfx from "../../../sounds/aggresive.mp3";
 import tweetBirdSfx from "../../../sounds/tweetBird.mp3";
+import boxingBellSfx from "../../../sounds/boxingBell.mp3";
 
-const soundEffects = [aggresiveSfx, tweetBirdSfx];
+const soundEffects = [aggresiveSfx, tweetBirdSfx, boxingBellSfx];
 
 const initialState = {
   sounds: soundEffects,
