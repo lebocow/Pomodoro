@@ -1,21 +1,27 @@
-import React from "react";
+import React, { lazy } from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import App from "./App";
+
 import "./index.css";
-import LogIn from "./routes/logIn/logIn.route";
-import Navigation from "./routes/navigation/navigation.route";
-import Pomodoro from "./routes/pomodoro/pomodoro.route";
-import Reports from "./routes/reports/reports.route";
-import Settings from "./routes/settings/settings.route";
+
+const App = lazy(() => import("./App"));
+const LogIn = lazy(() => import("./routes/logIn/logIn.route"));
+const Navigation = lazy(() => import("./routes/navigation/navigation.route"));
+const Pomodoro = lazy(() => import("./routes/pomodoro/pomodoro.route"));
+const Reports = lazy(() => import("./routes/reports/reports.route"));
+const Settings = lazy(() => import("./routes/settings/settings.route"));
+
 import { persistor, store } from "./store/store";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
+import Error from "./components/error/error.component";
+import LoadingPomodoro from "./components/loading-pomodoro/loading-pomodoro.component";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    errorElement: <Error />,
     children: [
       {
         path: "/",
@@ -47,7 +53,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <RouterProvider router={router} />
+        <React.Suspense fallback={<LoadingPomodoro />}>
+          <RouterProvider router={router} />
+        </React.Suspense>
       </PersistGate>
     </Provider>
   </React.StrictMode>

@@ -26,3 +26,7 @@ export const selectUserSound = createSelector(
   [selectSettingsReducer],
   (settingsSlice) => settingsSlice.userSound
 );
+export const selectUserThemesColors = createSelector(
+  [selectSettingsReducer],
+  (settingsSlice) => settingsSlice.userThemesColors
+);

@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   selectUserMaxCycles,
   selectUserSound,
-  selectUserWorkingMinutes,
 } from "../../store/slices/settings/settings.selector";
 import {
   selectCycle,
@@ -23,9 +22,11 @@ import {
   setIsRunning,
   setCycle,
 } from "../../store/slices/timer/timer.slice";
-import click from "../../sounds/click.mp3";
 
 import useSound from "use-sound";
+import CycleDisplay from "../../components/cycle-display/cycle-display.component";
+import TimerDisplay from "../../components/timer-display/timer-display.component";
+import PomodoroButton from "../../components/pomodoro-button/pomodoroButton.component";
 
 const Pomodoro = () => {
   const dispatch = useDispatch();
@@ -40,7 +41,6 @@ const Pomodoro = () => {
   const { settings: settingsState } = useSelector((state) => state);
   const sound = useSelector(selectUserSound);
   const [playSound] = useSound(sound);
-  const [playClick] = useSound(click);
 
   const intervalRef = useRef(null);
 
@@ -49,7 +49,7 @@ const Pomodoro = () => {
       ? () => {
           intervalRef.current = setInterval(() => {
             dispatch(decrementSeconds());
-          }, 25);
+          }, 1000);
         }
       : () => clearInterval(intervalRef.current);
   }, [isRunning, intervalRef]);
@@ -94,68 +94,53 @@ const Pomodoro = () => {
     }
   }, [seconds, minutes]);
 
+  const handleWorkingMode = useMemo(
+    () => () => {
+      switch (workingMode) {
+        case "Working": {
+          dispatch(setCycle(cycle < maxCycles ? cycle + 1 : cycle));
+          dispatch(setMinutes(settingsState.userWorkingMinutes));
+          break;
+        }
+        case "ShortBreak": {
+          dispatch(setMinutes(settingsState.userShortBreakMinutes));
+          break;
+        }
+        case "LongBreak": {
+          dispatch(setMinutes(settingsState.userLongBreakMinutes));
+          break;
+        }
+        case "Finished": {
+          dispatch(setMinutes(0));
+          dispatch(setIsRunning(false));
+          dispatch(setCycle(0));
+          break;
+        }
+        default: {
+          break;
+        }
+      }
+    },
+    [workingMode, cycle, maxCycles]
+  );
+
   useEffect(() => {
     if (initialRender) {
       setInitialRender(false);
       return;
     }
 
-    switch (workingMode) {
-      case "Working": {
-        dispatch(setCycle(cycle < maxCycles ? cycle + 1 : cycle));
-        dispatch(setMinutes(settingsState.userWorkingMinutes));
-        dispatch(setSeconds(0));
-        playSound();
-        break;
-      }
-      case "ShortBreak": {
-        dispatch(setMinutes(settingsState.userShortBreakMinutes));
-        dispatch(setSeconds(0));
-        playSound();
-        break;
-      }
-      case "LongBreak": {
-        dispatch(setMinutes(settingsState.userLongBreakMinutes));
-        dispatch(setSeconds(0));
-        playSound();
-        break;
-      }
-      case "Finished": {
-        dispatch(setMinutes(0));
-        dispatch(setSeconds(0));
-        dispatch(setIsRunning(false));
-        dispatch(setCycle(0));
-        playSound();
-        break;
-      }
-      default: {
-        break;
-      }
-    }
+    handleWorkingMode();
+    dispatch(setSeconds(0));
+    playSound();
   }, [workingMode, settingsState]);
 
-  const handleButton = () => {
-    playClick();
-    if (workingMode === "Initial" || workingMode === "Finished") {
-      dispatch(setWorkingMode(workingTypes[0]));
-    }
-    dispatch(setIsRunning(!isRunning));
-  };
-
   return (
-    <div className="h-full flex overflow-scroll">
-      <div className="flex flex-col mt-20 py-5 px-9 items-center justify-between h-72 bg-white/20 rounded-lg font-semibold w-[80vw]  sm:w-[30rem]">
-        <div className="text-xl mb-4">Cycle: {cycle}</div>
-        <span className="text-7xl">
-          {minutes.toString().padStart(2, 0)}:
-          {seconds.toString().padStart(2, 0)}
-        </span>
-        <button
-          onClick={handleButton}
-          className="bg-white w-1/2 text-red-500 mt-4 p-3 rounded-lg border-b-4 border-b-red-700/80 hover:-translate-y-0.5 transition shadow-lg active:translate-y-0.5 active:shadow-md"
-        >
-          {!isRunning ? "Start" : "Pause"}
-        </button>
+    <div className="h-full flex overflow-scroll shadow-xl">
+      <div className="flex flex-col py-5 px-9 items-center justify-between h-72 bg-white/20 rounded-lg font-semibold w-[80vw] sm:w-[30rem]">
+        <CycleDisplay />
+        <TimerDisplay />
+        <PomodoroButton />
       </div>
     </div>
   );

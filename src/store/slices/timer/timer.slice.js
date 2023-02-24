@@ -23,7 +23,6 @@ export const timerSlice = createSlice({
   reducers: {
     setWorkingMode: (state, action) => {
       state.workingMode = action.payload;
-      // if (state.workingMode === workingTypes[0]) state.cycle += 1;
     },
     setMinutes: (state, action) => {
       state.minutes = action.payload;
