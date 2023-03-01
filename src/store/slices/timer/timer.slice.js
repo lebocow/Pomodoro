@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const workingTypes = [
-  "Working",
-  "ShortBreak",
-  "LongBreak",
-  "Finished",
-  "Initial",
+  "working",
+  "shortbreak",
+  "longbreak",
+  "finished",
+  "initial",
 ];
 
 const initialState = {

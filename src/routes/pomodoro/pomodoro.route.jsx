@@ -39,8 +39,8 @@ const Pomodoro = () => {
   const maxCycles = useSelector(selectUserMaxCycles);
   const [initialRender, setInitialRender] = useState(true);
   const { settings: settingsState } = useSelector((state) => state);
-  const sound = useSelector(selectUserSound);
-  const [playSound] = useSound(sound);
+  const { sound, volume } = useSelector(selectUserSound);
+  const [playSound] = useSound(sound, { volume: volume });
 
   const intervalRef = useRef(null);
 
@@ -49,7 +49,7 @@ const Pomodoro = () => {
       ? () => {
           intervalRef.current = setInterval(() => {
             dispatch(decrementSeconds());
-          }, 1000);
+          }, 25);
         }
       : () => clearInterval(intervalRef.current);
   }, [isRunning, intervalRef]);
@@ -67,15 +67,15 @@ const Pomodoro = () => {
 
     if (minutes < 0) {
       switch (workingMode) {
-        case "LongBreak": {
+        case "longbreak": {
           dispatch(setWorkingMode(workingTypes[3]));
           break;
         }
-        case "ShortBreak": {
+        case "shortbreak": {
           dispatch(setWorkingMode(workingTypes[0]));
           break;
         }
-        case "Working": {
+        case "working": {
           dispatch(
             setWorkingMode(
               cycle === maxCycles ? workingTypes[2] : workingTypes[1]
@@ -83,7 +83,7 @@ const Pomodoro = () => {
           );
           break;
         }
-        case "Finished": {
+        case "finished": {
           dispatch(setWorkingMode(workingTypes[0]));
           break;
         }
@@ -97,20 +97,20 @@ const Pomodoro = () => {
   const handleWorkingMode = useMemo(
     () => () => {
       switch (workingMode) {
-        case "Working": {
+        case "working": {
           dispatch(setCycle(cycle < maxCycles ? cycle + 1 : cycle));
           dispatch(setMinutes(settingsState.userWorkingMinutes));
           break;
         }
-        case "ShortBreak": {
+        case "shortbreak": {
           dispatch(setMinutes(settingsState.userShortBreakMinutes));
           break;
         }
-        case "LongBreak": {
+        case "longbreak": {
           dispatch(setMinutes(settingsState.userLongBreakMinutes));
           break;
         }
-        case "Finished": {
+        case "finished": {
           dispatch(setMinutes(0));
           dispatch(setIsRunning(false));
           dispatch(setCycle(0));

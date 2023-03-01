@@ -1,25 +1,16 @@
 import { Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectWorkingMode } from "./store/slices/timer/timer.selector";
+import { selectUserThemesColors } from "./store/slices/settings/settings.selector";
 
 export default function App() {
   const workingMode = useSelector(selectWorkingMode);
-
-  let backgroundClass = "bg-red-700/80";
-
-  if (workingMode === "Working") {
-    backgroundClass = "bg-red-700/80";
-  } else if (workingMode === "ShortBreak") {
-    backgroundClass = "bg-blue-700/80";
-  } else if (workingMode === "LongBreak") {
-    backgroundClass = "bg-green-700/80";
-  } else if (workingMode === "Finished") {
-    backgroundClass = "bg-orange-700/80";
-  }
+  const backgroundColor = useSelector(selectUserThemesColors)[workingMode]
+    .background;
 
   return (
     <div
-      className={`flex flex-col min-h-screen ${backgroundClass} items-center transition-colors duration-300 text-slate-50`}
+      className={`flex flex-col min-h-screen ${backgroundColor} items-center transition-colors duration-300 text-slate-50`}
     >
       <Outlet />
     </div>

@@ -10,17 +10,25 @@ import {
 } from "../../store/slices/timer/timer.slice";
 import useSound from "use-sound";
 import click from "../../sounds/click.mp3";
+import {
+  selectUserSound,
+  selectUserThemesColors,
+} from "../../store/slices/settings/settings.selector";
 
 const PomodoroButton = () => {
   const dispatch = useDispatch();
   const isRunning = useSelector(selectIsRunning);
   const workingTypes = useSelector(selectWorkingTypes);
   const workingMode = useSelector(selectWorkingMode);
-  const [playClick] = useSound(click);
+  const { volume } = useSelector(selectUserSound);
+  const [playClick] = useSound(click, { volume: volume });
+  const { border: borderColor, text: textColor } = useSelector(
+    selectUserThemesColors
+  )[workingMode];
 
   const handleButton = () => {
     playClick();
-    if (workingMode === "Initial" || workingMode === "Finished") {
+    if (workingMode === "initial" || workingMode === "finished") {
       dispatch(setWorkingMode(workingTypes[0]));
     }
     dispatch(setIsRunning(!isRunning));
@@ -29,7 +37,7 @@ const PomodoroButton = () => {
   return (
     <button
       onClick={handleButton}
-      className="bg-white w-1/2 text-red-500 mt-4 p-3 rounded-lg border-b-4 border-b-red-700/80 hover:-translate-y-0.5 transition shadow-lg active:translate-y-0.5 active:shadow-md"
+      className={`bg-white w-1/2 ${textColor} mt-4 p-3 rounded-lg border-b-4 ${borderColor} hover:-translate-y-0.5 transition shadow-lg active:translate-y-0.5 active:shadow-md`}
     >
       {!isRunning ? "Start" : "Pause"}
     </button>

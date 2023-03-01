@@ -3,7 +3,7 @@ import tomatoLogo from "../../assets/tomatoLogo.svg";
 
 const Logo = () => (
   <NavLink to="/" className="flex items-center cursor-pointer">
-    <img className="w-10 h-10 fill-red-500" src={tomatoLogo}></img>
+    <img className="w-10 h-10" src={tomatoLogo}></img>
     <div className="text-xl">Pomodoro</div>
   </NavLink>
 );
