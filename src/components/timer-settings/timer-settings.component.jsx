@@ -43,7 +43,7 @@ const TimerSettings = () => {
 
   return (
     <div className="p-3 flex flex-col items-center justify-center">
-      <div className="bg-white/10 p-3 rounded-lg">
+      <div className="bg-white/10 p-3 rounded-lg space-y-2">
         <div className="flex space-x-1 items-center">
           <FontAwesomeIcon className="h-5 w-5" icon={faClock} />
           <div>Timer</div>
@@ -51,7 +51,7 @@ const TimerSettings = () => {
         <div>
           <div>Minutes</div>
           <input
-            className="text-black"
+            className="text-black px-1 rounded-sm outline-none"
             type="number"
             value={userWorkingMinutes}
             onChange={handleWorkingMinutesChange}
@@ -61,7 +61,7 @@ const TimerSettings = () => {
         <div>
           <div>Short Pause</div>
           <input
-            className="text-black"
+            className="text-black px-1 rounded-sm outline-none"
             type="number"
             value={userShortBreakMinutes}
             onChange={handleShortBreakMinutesChange}
@@ -71,7 +71,7 @@ const TimerSettings = () => {
         <div>
           <div>Long Pause</div>
           <input
-            className="text-black"
+            className="text-black px-1 rounded-sm outline-none"
             type="number"
             value={userLongBreakMinutes}
             onChange={handleLongBreakMinutesChange}
@@ -81,7 +81,7 @@ const TimerSettings = () => {
         <div>
           <div>Work cycles</div>
           <input
-            className="text-black"
+            className="text-black px-1 rounded-sm outline-none"
             type="number"
             value={userMaxCycles}
             onChange={handleMaxCyclesChange}

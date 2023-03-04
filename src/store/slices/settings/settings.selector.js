@@ -30,3 +30,7 @@ export const selectUserThemesColors = createSelector(
   [selectSettingsReducer],
   (settingsSlice) => settingsSlice.userThemesColors
 );
+export const selectThemesColors = createSelector(
+  [selectSettingsReducer],
+  (settingsSlice) => settingsSlice.themesColors
+);

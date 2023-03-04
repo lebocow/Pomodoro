@@ -49,7 +49,7 @@ const Pomodoro = () => {
       ? () => {
           intervalRef.current = setInterval(() => {
             dispatch(decrementSeconds());
-          }, 25);
+          }, 1000);
         }
       : () => clearInterval(intervalRef.current);
   }, [isRunning, intervalRef]);

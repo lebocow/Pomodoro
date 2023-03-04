@@ -47,13 +47,13 @@ const SoundSettings = () => {
           <FontAwesomeIcon className="h-4 w-4" icon={faMusic} />
           <div>Sounds</div>
         </div>
-        <div className="flex flex-col">
+        <div className="flex flex-col space-y-2">
           <div>
             <div>Alarm Sounds</div>
             <select
               value={userSound}
               onChange={handleSoundChange}
-              className="text-black"
+              className="text-black rounded-sm outline-none"
             >
               <option value="">--- Select a Sound ---</option>
               {sounds.map((sound) => {

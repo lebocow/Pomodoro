@@ -6,30 +6,50 @@ import boxingBellSfx from "../../../sounds/boxingBell.mp3";
 
 const soundEffects = [aggresiveSfx, tweetBirdSfx, boxingBellSfx];
 const themesColors = {
-  initial: {
+  red: {
     background: "bg-red-700/80",
     border: "border-b-red-700/80",
     text: "text-red-500",
   },
-  working: {
-    background: "bg-red-700/80",
-    border: "border-b-red-700/80",
-    text: "text-red-500",
-  },
-  shortbreak: {
+  blue: {
     background: "bg-blue-700/80",
     border: "border-b-blue-700/80",
     text: "text-blue-500",
   },
-  longbreak: {
+  green: {
     background: "bg-green-700/80",
     border: "border-b-green-700/80",
     text: "text-green-500",
   },
-  finished: {
+  orange: {
     background: "bg-orange-700/80",
     border: "border-b-orange-700/80",
     text: "text-orange-500",
+  },
+  fuchsia: {
+    background: "bg-fuchsia-700/80",
+    border: "border-b-fuchsia-700/80",
+    text: "text-fuchsia-500",
+  },
+  purple: {
+    background: "bg-purple-700/80",
+    border: "border-b-purple-700/80",
+    text: "text-purple-500",
+  },
+  rose: {
+    background: "bg-rose-700/80",
+    border: "border-b-rose-700/80",
+    text: "text-rose-500",
+  },
+  cyan: {
+    background: "bg-cyan-700/80",
+    border: "border-b-cyan-700/80",
+    text: "text-cyan-500",
+  },
+  teal: {
+    background: "bg-teal-700/80",
+    border: "border-b-teal-700/80",
+    text: "text-teal-500",
   },
 };
 
@@ -42,11 +62,11 @@ const initialState = {
   userMaxCycles: 4,
   themesColors: themesColors,
   userThemesColors: {
-    initial: themesColors.initial,
-    working: themesColors.working,
-    shortbreak: themesColors.shortbreak,
-    longbreak: themesColors.longbreak,
-    finished: themesColors.finished,
+    initial: themesColors.red,
+    working: themesColors.red,
+    shortbreak: themesColors.blue,
+    longbreak: themesColors.green,
+    finished: themesColors.orange,
   },
 };
 
@@ -89,6 +109,7 @@ export const {
   setUserMaxCycles,
   setUserSound,
   setUserVolume,
+  setUserThemesColors,
 } = settingsSlice.actions;
 
 export default settingsSlice.reducer;
