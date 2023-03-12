@@ -5,7 +5,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 
 const App = lazy(() => import("./App"));
-const LogIn = lazy(() => import("./routes/logIn/logIn.route"));
+const SignIn = lazy(() => import("./routes/signIn/signIn.route"));
+const SignUp = lazy(() => import("./routes/signUp/signUp.route"));
 const Navigation = lazy(() => import("./routes/navigation/navigation.route"));
 const Pomodoro = lazy(() => import("./routes/pomodoro/pomodoro.route"));
 const Reports = lazy(() => import("./routes/reports/reports.route"));
@@ -40,8 +41,12 @@ const router = createBrowserRouter([
             element: <Settings />,
           },
           {
-            path: "/login",
-            element: <LogIn />,
+            path: "/sign-in",
+            element: <SignIn />,
+          },
+          {
+            path: "/sign-up",
+            element: <SignUp />,
           },
         ],
       },

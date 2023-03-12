@@ -2,17 +2,17 @@ import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NavLink } from "react-router-dom";
 
-const LoginButton = () => (
+const SignInButton = () => (
   <NavLink
-    to="/login"
+    to="/sign-in"
     className="flex flex-row items-center justify-center space-x-1 bg-white/10 px-3 py-1 rounded-2xl hover:rounded-lg duration-150 cursor-pointer"
   >
     <FontAwesomeIcon
       className="h-6 w-6 sm:w-7 sm:h-7 text-black"
       icon={faUser}
     />
-    <span className="hidden sm:block">Log in</span>
+    <span className="hidden sm:block">Sign in</span>
   </NavLink>
 );
 
-export default LoginButton;
+export default SignInButton;

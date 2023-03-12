@@ -61,6 +61,12 @@ const ThemeSettings = () => {
         className="relative w-60 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 outline-none"
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
+        style={{
+          overlay: {
+            backdropFilter: "blur(5px)",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+          },
+        }}
       >
         <FontAwesomeIcon
           onClick={closeModal}
