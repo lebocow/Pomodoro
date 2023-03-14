@@ -1,9 +1,5 @@
-import { FcGoogle } from "react-icons/fc";
 import { useState } from "react";
-import {
-  authSignUpWithEmailAndPassword,
-  db,
-} from "../../utils/firebase/firebase.utils";
+import { authSignUpWithEmailAndPassword } from "../../utils/firebase/firebase.utils";
 
 const SignUp = () => {
   const [displayName, setDisplayName] = useState("");
@@ -33,7 +29,6 @@ const SignUp = () => {
         password,
         displayName
       );
-      console.log(user);
     } catch (error) {
       // const errorCode = error.code;
       // const errorMessage = error.message;

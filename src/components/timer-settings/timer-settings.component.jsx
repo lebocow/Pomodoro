@@ -13,8 +13,21 @@ import {
   setUserShortBreakMinutes,
   setUserWorkingMinutes,
 } from "../../store/slices/settings/settings.slice";
+import { selectWorkingTypes } from "../../store/slices/timer/timer.selector";
 
-import { setMinutes, setSeconds } from "../../store/slices/timer/timer.slice";
+import {
+  setCycle,
+  setIsRunning,
+  setMinutes,
+  setSeconds,
+  setWorkingMode,
+} from "../../store/slices/timer/timer.slice";
+import { selectPomDocRef } from "../../store/slices/user/user.selector";
+import {
+  setCurrentUser,
+  setPomDocRef,
+} from "../../store/slices/user/user.slice";
+import { deletePomodoroDocument } from "../../utils/firebase/firebase.utils";
 
 const TimerSettings = () => {
   const dispatch = useDispatch();
@@ -22,23 +35,40 @@ const TimerSettings = () => {
   const userShortBreakMinutes = useSelector(selectUserShortBreakMinutes);
   const userLongBreakMinutes = useSelector(selectUserLongBreakMinutes);
   const userMaxCycles = useSelector(selectUserMaxCycles);
+  const workingTypes = useSelector(selectWorkingTypes);
+  const pomDocRef = useSelector(selectPomDocRef);
+
+  const resetPomodoroTimer = () => {
+    dispatch(setWorkingMode(workingTypes[4]));
+    dispatch(setMinutes(0));
+    dispatch(setIsRunning(false));
+    dispatch(setCycle(0));
+    if (pomDocRef) {
+      deletePomodoroDocument(pomDocRef);
+      dispatch(setPomDocRef(null));
+    }
+  };
 
   const handleWorkingMinutesChange = (event) => {
     dispatch(setUserWorkingMinutes(event.target.value));
     dispatch(setMinutes(event.target.value));
     dispatch(setSeconds(0));
+    resetPomodoroTimer();
   };
 
   const handleShortBreakMinutesChange = (event) => {
     dispatch(setUserShortBreakMinutes(Number(event.target.value)));
+    resetPomodoroTimer();
   };
 
   const handleLongBreakMinutesChange = (event) => {
     dispatch(setUserLongBreakMinutes(Number(event.target.value)));
+    resetPomodoroTimer();
   };
 
   const handleMaxCyclesChange = (event) => {
     dispatch(setUserMaxCycles(Number(event.target.value)));
+    resetPomodoroTimer();
   };
 
   return (

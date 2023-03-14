@@ -6,3 +6,7 @@ export const selectCurrentUser = createSelector(
   [selectUserReducer],
   (userSlice) => userSlice.currentUser
 );
+export const selectPomDocRef = createSelector(
+  [selectUserReducer],
+  (userSlice) => userSlice.pomDocRef
+);

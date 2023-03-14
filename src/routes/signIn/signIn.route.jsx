@@ -27,6 +27,7 @@ const SignIn = () => {
     try {
       await authSignInWithEmailAndPassword(email, password);
       setIsLoading(false);
+      navigate("/");
     } catch (error) {
       setIsLoading(false);
       // const errorCode = error.code;
@@ -36,7 +37,6 @@ const SignIn = () => {
   };
 
   const handleNavigate = () => {
-    console.log(`click`);
     navigate("/sign-up");
   };
 
@@ -44,7 +44,7 @@ const SignIn = () => {
     setIsLoading(true);
     try {
       const user = await authWithGoogle();
-      console.log(user);
+
       setIsLoading(false);
       navigate("/");
     } catch (error) {

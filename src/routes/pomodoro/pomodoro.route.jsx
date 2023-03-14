@@ -27,6 +27,15 @@ import useSound from "use-sound";
 import CycleDisplay from "../../components/cycle-display/cycle-display.component";
 import TimerDisplay from "../../components/timer-display/timer-display.component";
 import PomodoroButton from "../../components/pomodoro-button/pomodoroButton.component";
+import {
+  selectCurrentUser,
+  selectPomDocRef,
+} from "../../store/slices/user/user.selector";
+import {
+  createPomodoroDocument,
+  updatePomodoroDocument,
+} from "../../utils/firebase/firebase.utils";
+import { setPomDocRef } from "../../store/slices/user/user.slice";
 
 const Pomodoro = () => {
   const dispatch = useDispatch();
@@ -41,6 +50,8 @@ const Pomodoro = () => {
   const { settings: settingsState } = useSelector((state) => state);
   const { sound, volume } = useSelector(selectUserSound);
   const [playSound] = useSound(sound, { volume: volume });
+  const currentUser = useSelector(selectCurrentUser);
+  const pomDocRef = useSelector(selectPomDocRef);
 
   const intervalRef = useRef(null);
 
@@ -49,7 +60,7 @@ const Pomodoro = () => {
       ? () => {
           intervalRef.current = setInterval(() => {
             dispatch(decrementSeconds());
-          }, 1000);
+          }, 25);
         }
       : () => clearInterval(intervalRef.current);
   }, [isRunning, intervalRef]);
@@ -100,14 +111,17 @@ const Pomodoro = () => {
         case "working": {
           dispatch(setCycle(cycle < maxCycles ? cycle + 1 : cycle));
           dispatch(setMinutes(settingsState.userWorkingMinutes));
+
           break;
         }
         case "shortbreak": {
           dispatch(setMinutes(settingsState.userShortBreakMinutes));
+
           break;
         }
         case "longbreak": {
           dispatch(setMinutes(settingsState.userLongBreakMinutes));
+
           break;
         }
         case "finished": {
@@ -124,13 +138,52 @@ const Pomodoro = () => {
     [workingMode, cycle, maxCycles]
   );
 
+  const handleFirestoreDB = useMemo(() => {
+    const handleWorking = async () => {
+      if (!pomDocRef) {
+        dispatch(
+          setPomDocRef(
+            await createPomodoroDocument(
+              currentUser,
+              settingsState.userWorkingMinutes
+            )
+          )
+        );
+      }
+    };
+
+    const handleShortOrLongBreak = async () => {
+      await updatePomodoroDocument(pomDocRef, cycle);
+    };
+
+    const handleFinished = async () => {
+      await updatePomodoroDocument(pomDocRef);
+      dispatch(setPomDocRef(null));
+    };
+
+    switch (workingMode) {
+      case "working":
+        return handleWorking;
+
+      case "shortbreak":
+      case "longbreak":
+        return handleShortOrLongBreak;
+
+      case "finished":
+        return handleFinished;
+
+      default:
+        return () => {};
+    }
+  }, [workingMode, cycle, maxCycles]);
+
   useEffect(() => {
     if (initialRender) {
       setInitialRender(false);
       return;
     }
-
     handleWorkingMode();
+    currentUser && currentUser.uid && handleFirestoreDB();
     dispatch(setSeconds(0));
     playSound();
   }, [workingMode, settingsState]);

@@ -2,10 +2,14 @@ import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { signOut } from "firebase/auth";
 import { auth, authSignOut } from "../../utils/firebase/firebase.utils";
+import { useDispatch } from "react-redux";
+import { setPomDocRef } from "../../store/slices/user/user.slice";
 
 const SignOutButton = () => {
+  const dispatch = useDispatch();
   const handleSignOut = async () => {
     await authSignOut();
+    dispatch(setPomDocRef(null));
   };
 
   return (
