@@ -1,11 +1,13 @@
 import { Fragment } from "react";
 import { Outlet } from "react-router-dom";
-import ReportButton from "../../components/report-button/report-button.component";
-import SettingsButton from "../../components/settings-button/settings-button.component";
-import Logo from "../../components/logo/logo-component";
-import SignInButton from "../../components/sign-in-button/sign-in-button.component";
+
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../store/slices/user/user.selector";
+
+import Logo from "../../components/logo/logo-component";
+import ReportButton from "../../components/report-button/report-button.component";
+import SettingsButton from "../../components/settings-button/settings-button.component";
+import SignInButton from "../../components/sign-in-button/sign-in-button.component";
 import SignOutButton from "../../components/sign-out-button/sign-out-button.component";
 
 const Navigation = () => {

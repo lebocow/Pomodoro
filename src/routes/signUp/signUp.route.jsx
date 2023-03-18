@@ -1,4 +1,10 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
+
+import { selectUserThemesColors } from "../../store/slices/settings/settings.selector";
+
+import { selectWorkingMode } from "../../store/slices/timer/timer.selector";
+
 import { authSignUpWithEmailAndPassword } from "../../utils/firebase/firebase.utils";
 
 const SignUp = () => {
@@ -6,6 +12,11 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  const workingMode = useSelector(selectWorkingMode);
+  const { background: backgroundColor } = useSelector(selectUserThemesColors)[
+    workingMode
+  ];
 
   const handleDisplayNameChange = (event) => {
     setDisplayName(event.target.value);
@@ -30,8 +41,6 @@ const SignUp = () => {
         displayName
       );
     } catch (error) {
-      // const errorCode = error.code;
-      // const errorMessage = error.message;
       console.error(error);
     }
   };
@@ -42,6 +51,7 @@ const SignUp = () => {
         <img
           className="w-96 hidden sm:block"
           src="src/images/pexels-anastasia-shuraeva-7279327.jpg"
+          loading="lazy"
         />
       </div>
       <div className="flex flex-col items-center rounded-md p-5">
@@ -84,7 +94,7 @@ const SignUp = () => {
               required
             />
           </div>
-          <button className="p-3 rounded-sm bg-red-700/60 mt-auto">
+          <button className={`p-3 rounded-sm ${backgroundColor} mt-auto`}>
             Sign Up
           </button>
         </form>

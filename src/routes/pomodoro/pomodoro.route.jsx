@@ -1,9 +1,12 @@
-import React, { useState, useRef, useEffect, useMemo } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
+
 import { useDispatch, useSelector } from "react-redux";
+
 import {
   selectUserMaxCycles,
   selectUserSound,
 } from "../../store/slices/settings/settings.selector";
+
 import {
   selectCycle,
   selectIsRunning,
@@ -23,19 +26,23 @@ import {
   setCycle,
 } from "../../store/slices/timer/timer.slice";
 
-import useSound from "use-sound";
-import CycleDisplay from "../../components/cycle-display/cycle-display.component";
-import TimerDisplay from "../../components/timer-display/timer-display.component";
-import PomodoroButton from "../../components/pomodoro-button/pomodoroButton.component";
 import {
   selectCurrentUser,
   selectPomDocRef,
 } from "../../store/slices/user/user.selector";
+
+import { setPomDocRef } from "../../store/slices/user/user.slice";
+
 import {
   createPomodoroDocument,
   updatePomodoroDocument,
 } from "../../utils/firebase/firebase.utils";
-import { setPomDocRef } from "../../store/slices/user/user.slice";
+
+import useSound from "use-sound";
+
+import PomodoroDisplay from "../../components/pomodoro-display/pomodoro-display.component";
+import TimerDisplay from "../../components/timer-display/timer-display.component";
+import PomodoroButton from "../../components/pomodoro-button/pomodoroButton.component";
 
 const Pomodoro = () => {
   const dispatch = useDispatch();
@@ -191,7 +198,7 @@ const Pomodoro = () => {
   return (
     <div className="h-full flex overflow-scroll shadow-xl">
       <div className="flex flex-col py-5 px-9 items-center justify-between h-72 bg-white/20 rounded-lg font-semibold w-[80vw] sm:w-[30rem]">
-        <CycleDisplay />
+        <PomodoroDisplay />
         <TimerDisplay />
         <PomodoroButton />
       </div>

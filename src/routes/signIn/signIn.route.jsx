@@ -1,18 +1,26 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import { FcGoogle } from "react-icons/fc";
 import { ImSpinner2 } from "react-icons/im";
 
-import { useState } from "react";
 import {
   authSignInWithEmailAndPassword,
   authWithGoogle,
 } from "../../utils/firebase/firebase.utils";
-import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectWorkingMode } from "../../store/slices/timer/timer.selector";
+import { selectUserThemesColors } from "../../store/slices/settings/settings.selector";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const workingMode = useSelector(selectWorkingMode);
+  const { background: backgroundColor } = useSelector(selectUserThemesColors)[
+    workingMode
+  ];
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -30,8 +38,6 @@ const SignIn = () => {
       navigate("/");
     } catch (error) {
       setIsLoading(false);
-      // const errorCode = error.code;
-      // const errorMessage = error.message;
       console.error(error);
     }
   };
@@ -58,9 +64,9 @@ const SignIn = () => {
       <div className="flex flex-col items-center bg-white/20 p-5 rounded-md ">
         <div
           onClick={handleGoogleSignIn}
-          className="flex items-center space-x-2 rounded-md border-4 w-full justify-center p-3 bg-black border-red-700/60 shadow-md hover:-translate-y-0.5 active:translate-y-0.5 transition-all"
+          className="flex items-center space-x-2 rounded-md w-full justify-center p-3 bg-white/90 shadow-md hover:-translate-y-0.5 active:translate-y-0.5 transition-all"
         >
-          <div className="text-lg">Sign with with</div>
+          <div className="text-lg text-black">Sign with with</div>
           <FcGoogle className="w-7 h-7" />
         </div>
         <div className="flex w-full items-center justify-between mb-3 mt-3">
@@ -89,7 +95,9 @@ const SignIn = () => {
             required
           />
 
-          <button className="p-3 rounded-sm bg-red-700/60">Sign In</button>
+          <button className={`p-3 rounded-sm ${backgroundColor}`}>
+            Sign In
+          </button>
         </form>
       </div>
       <div className="flex flex-col items-center space-y-2">

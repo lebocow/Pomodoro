@@ -3,7 +3,6 @@ import tomato from "../../images/sadTomato.png";
 
 const Error = () => {
   const error = useRouteError();
-  console.log(error);
 
   if (isRouteErrorResponse(error)) {
     return (
