@@ -7,6 +7,8 @@ import { selectWorkingMode } from "../../store/slices/timer/timer.selector";
 
 import { authSignUpWithEmailAndPassword } from "../../utils/firebase/firebase.utils";
 
+import registerImage from "../../images/pexels-anastasia-shuraeva-7279327.jpg";
+
 const SignUp = () => {
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
@@ -50,7 +52,7 @@ const SignUp = () => {
       <div className="">
         <img
           className="w-96 hidden sm:block"
-          src="src/images/pexels-anastasia-shuraeva-7279327.jpg"
+          src={registerImage}
           loading="lazy"
         />
       </div>
