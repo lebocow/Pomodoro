@@ -7,7 +7,6 @@ import {
   getDoc,
   getDocs,
   getFirestore,
-  limit,
   orderBy,
   query,
   setDoc,
@@ -69,12 +68,13 @@ export const createUserDocumentFromAuth = async (userCredential) => {
   const userSnapshot = await getDoc(userDocRef);
   if (!userSnapshot.exists()) {
     try {
-      const { displayName, email } = userCredential.user;
+      const { displayName, email, photoURL } = userCredential.user;
       const createdAt = new Date();
       await setDoc(userDocRef, {
         displayName,
         email,
         createdAt,
+        photoURL,
       });
     } catch (error) {
       console.log("error creating the user", error);
@@ -217,9 +217,41 @@ export const fetchReportData = async (userCredential, reportType) => {
 };
 
 export const fetchRankingData = async () => {
-  const q = query(pomodorosRef, orderBy("workMinutes", "desc"));
+  const q = query(pomodorosRef);
   const querySnapshot = await getDocs(q);
   const data = querySnapshot.docs.map((doc) => doc.data());
 
-  return data;
+  const userTotals = {};
+
+  data.forEach((pomodoroData) => {
+    const { userId, cycles, workMinutes } = pomodoroData;
+    const totalWorkingMinutes = cycles * workMinutes;
+
+    if (userTotals[userId]) {
+      userTotals[userId].totalWorkingMinutes += totalWorkingMinutes;
+    } else {
+      userTotals[userId] = {
+        userId,
+        totalWorkingMinutes,
+      };
+    }
+  });
+
+  const rankingData = [];
+
+  for (const userId in userTotals) {
+    const userDocRef = doc(usersRef, userId);
+    const userSnapshot = await getDoc(userDocRef);
+    const { displayName, photoURL } = userSnapshot.data();
+
+    rankingData.push({
+      ...userTotals[userId],
+      photoURL,
+      displayName,
+    });
+  }
+
+  rankingData.sort((a, b) => b.totalWorkingMinutes - a.totalWorkingMinutes);
+
+  return rankingData.slice(0, 10);
 };
