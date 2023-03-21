@@ -68,7 +68,7 @@ const Pomodoro = () => {
       ? () => {
           intervalRef.current = window.setInterval(() => {
             dispatch(decrementSeconds());
-          }, 25);
+          }, 1000);
         }
       : () => intervalRef.current && window.clearInterval(intervalRef.current);
   }, [isRunning, intervalRef]);
